@@ -18,17 +18,22 @@ def get_indices_of_item_weights(weights, length, limit):
     # Need a temp store since I can't hold duplicate keys on the same data structure
     dup_keys = {}
 
+    # Traverse over the weights to feed my store
     for index in range(len(weights)):
         if weights[index] not in store:
+            # Save computation with index as key and value a tuple of (reminder, index)
+            # So we can later check if there is a key = reminder
             store[weights[index]] = (limit - weights[index], index)
         elif len(store) <= 1:
             dup_keys[weights[index]] = (limit - weights[index], index)
 
     for index in range(len(weights)):
+        # Check if there is an index = reminder of current index
         if store[weights[index]][0] in store:
             # If there is duplicates, answer should be in looking at dub and store for the same key
             if len(dup_keys) > 0:
                 return (dup_keys[dup_keys[weights[index]][0]][1], store[weights[index]][1])
+            # If not, return the key = reminder and the key = index
             return (store[store[weights[index]][0]][1], store[weights[index]][1])
 
     return None
